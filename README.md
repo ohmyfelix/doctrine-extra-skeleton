@@ -44,10 +44,10 @@ https://examples.contributte.org/doctrine-skeleton/
 
 ## Installation
 
-To install latest version of `contributte/doctrine-skeleton` use [Composer](https://getcomposer.org).
+To install latest version of `contributte/doctrine-extra-skeleton` use [Composer](https://getcomposer.org).
 
 ```
-composer create-project -s dev contributte/doctrine-skeleton acme
+composer create-project -s dev contributte/doctrine-extra-skeleton acme
 ```
 
 ### Install using [docker](https://github.com/docker/docker/)
@@ -55,7 +55,7 @@ composer create-project -s dev contributte/doctrine-skeleton acme
 1) At first, use composer to install this project.
 
    ```
-   composer create-project -s dev contributte/doctrine-skeleton
+   composer create-project -s dev contributte/doctrine-extra-skeleton
    ```
 
 2) After that, you have to setup Postgres >= 12 database. You can start it manually or use docker image `dockette/postgres:12`.
@@ -93,12 +93,12 @@ composer create-project -s dev contributte/doctrine-skeleton acme
 
 6) Open http://localhost:8000 and enjoy!
 
-### Install using [docker-compose](https://https://github.com/docker/compose/)
+### Install using [docker-compose](https://github.com/docker/compose/)
 
 1) At first, use composer to install this project.
 
    ```
-   composer create-project -s dev contributte/webapp-project
+   composer create-project -s dev contributte/webapp-skeleton
    ```
 
 2) Modify `config/local.neon` and set host to `database`

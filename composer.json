@@ -1,6 +1,6 @@
 {
-  "name": "contributte/doctrine-skeleton",
-  "description": "Nette and Doctrine project skeleton. Using Doctrine (@nettrine) and Contributte (@contributte) libraries by @f3l1x.",
+  "name": "contributte/doctrine-extra-skeleton",
+  "description": "Advanced Nette and Doctrine project skeleton with an expanded set of Nettrine and Contributte integrations. Using Doctrine (@nettrine) and Contributte (@contributte) libraries by @f3l1x.",
   "keywords": [
     "php",
     "nette",
