@@ -1,0 +1,66 @@
+name: "Coverage"
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+  push:
+    branches: ["*"]
+
+  schedule:
+    - cron: "0 8 * * 1"
+
+jobs:
+  coverage:
+    name: "Nette Tester"
+    runs-on: "ubuntu-latest"
+
+    services:
+      postgres:
+        image: "postgres:15"
+        env:
+          POSTGRES_PASSWORD: "doctrine"
+          POSTGRES_USER: "doctrine"
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "PHP"
+        uses: "contributte/.github/.github/actions/setup-php@master"
+        with:
+          php: "8.4"
+          extensions: "json, pdo_pgsql, pgsql"
+
+      - name: "Composer"
+        uses: "contributte/.github/.github/actions/setup-composer@master"
+
+      - name: "Prepare"
+        run: |
+          composer set-config -- config/local.neon \
+            --database.host=localhost \
+            --database.user=doctrine \
+            --database.password=doctrine \
+            --database.dbname=doctrine
+          bin/console migrations:migrate -n
+          bin/console doctrine:fixtures:load -n
+          bin/console orm:validate --skip-sync
+
+      - name: "Run Nette Tester"
+        run: "make coverage"
+
+      - name: "Codecov"
+        uses: "codecov/codecov-action@v4"
+        with:
+          files: "./coverage.xml"
+          fail_ci_if_error: true
+          verbose: true
+        env:
+          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
