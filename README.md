@@ -9,7 +9,9 @@ Advanced Nette and Doctrine project skeleton with Nettrine and Contributte integ
 - `make` for the provided development commands
 - Docker Compose for the container stack
 
-## Create a project
+## Native quick start
+
+Before running `make build`, start a local PostgreSQL service with the credentials tracked in `config/local.neon.dist`: host `localhost`, database `doctrine`, user `doctrine`, and password `doctrine`.
 
 ```bash
 composer create-project contributte/doctrine-extra-skeleton acme
@@ -21,7 +23,9 @@ make dev
 
 Composer creates `config/local.neon` from `config/local.neon.dist`. The default local configuration uses a PostgreSQL database on `localhost` named `doctrine`, with user and password `doctrine`.
 
-`make build` drops the current schema, runs migrations, and loads fixtures. The development server listens on `http://localhost:8000`.
+> **Warning:** `make build` drops the current schema, then runs migrations and loads fixtures.
+
+The development server listens on <http://localhost:8000>. The default route renders the Basic presenter, including the books, categories, and tags loaded by the fixtures.
 
 ## Docker Compose
 
@@ -33,7 +37,7 @@ docker compose up
 
 The application is available at `http://localhost` and `https://localhost`; Adminer is available at `http://localhost:8081`. The PostgreSQL service is internal to the Compose network and uses database, user, and password `contributte`.
 
-For Compose, set `parameters.database.host` in `config/local.neon` to `database` and use the Compose database credentials. The PHP container installs dependencies, runs migrations, and loads fixtures at startup.
+For Compose, update `config/local.neon` to use host `database` and the tracked Compose credentials: database, user, and password `contributte`. The PHP container installs dependencies, runs migrations, and loads fixtures at startup.
 
 ## Development
 
