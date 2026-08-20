@@ -11,19 +11,20 @@ Advanced Nette and Doctrine project skeleton with Nettrine and Contributte integ
 
 ## Native quick start
 
-Before running `make build`, start a local PostgreSQL service with the credentials tracked in `config/local.neon.dist`: host `localhost`, database `doctrine`, user `doctrine`, and password `doctrine`.
+Start PostgreSQL 15 with the credentials tracked in `config/local.neon.dist`: host `localhost`, database `doctrine`, user `doctrine`, and password `doctrine`.
 
 ```bash
 composer create-project contributte/doctrine-extra-skeleton acme
 cd acme
-make project
-make build
+make setup
+NETTE_DEBUG=1 bin/console migrations:migrate --no-interaction
+NETTE_DEBUG=1 bin/console doctrine:fixtures:load --no-interaction --append
 make dev
 ```
 
-Composer creates `config/local.neon` from `config/local.neon.dist`. The default local configuration uses a PostgreSQL database on `localhost` named `doctrine`, with user and password `doctrine`.
+`composer create-project` installs the dependencies, and its post-install script creates `config/local.neon` from `config/local.neon.dist`. Keep that generated file for local overrides; it is not committed. `make setup` only creates the writable runtime directories, avoiding a second Composer install.
 
-> **Warning:** `make build` drops the current schema, then runs migrations and loads fixtures.
+The commands above apply pending migrations and append fixtures without first dropping the database. To intentionally reset a disposable development database, run `make build`; it drops the complete schema before migrating and appending fixtures.
 
 The development server listens on <http://localhost:8000>. The default route renders the Basic presenter, including the books, categories, and tags loaded by the fixtures.
 
@@ -35,9 +36,20 @@ Start the stack with:
 docker compose up
 ```
 
-The application is available at `http://localhost` and `https://localhost`; Adminer is available at `http://localhost:8081`. The PostgreSQL service is internal to the Compose network and uses database, user, and password `contributte`.
+Compose uses a separate database configuration. Before starting it, set `config/local.neon` to:
 
-For Compose, update `config/local.neon` to use host `database` and the tracked Compose credentials: database, user, and password `contributte`. The PHP container installs dependencies, runs migrations, and loads fixtures at startup.
+```neon
+parameters:
+	database:
+		host: database
+		dbname: contributte
+		user: contributte
+		password: contributte
+```
+
+The application is available at <http://localhost> and <https://localhost>; Adminer is available at <http://localhost:8081>. The PostgreSQL 15 service is internal to the Compose network. The PHP container installs dependencies, runs migrations, and loads fixtures at startup, so use the full stack with a fresh disposable database volume.
+
+The `make docker-postgres` target starts an older PostgreSQL image with different database defaults and is not compatible with the native quick-start configuration above.
 
 ## Development
 
